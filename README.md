@@ -5,9 +5,9 @@ Overview
     The Plinko Simulator is a free-to-play gambling simulator.
 
 Features
+
   - Free-to-Play Gambling Simulator: Enjoy all the excitement of Plinko without risking real money. Play purely for fun!
   - Fake Money for Gambling: Start with a virtual balance and place bets to win more!
-Customizable Gameplay
   - Adjustable Betting Amount: Set your preferred bet size for each drop.
   - Adjustable Risk Levels: Modify the risk level to influence multipliers, ranging from conservative to extreme.
   - Row Slider: Choose between 8-16 rows to customize the game's complexity.
