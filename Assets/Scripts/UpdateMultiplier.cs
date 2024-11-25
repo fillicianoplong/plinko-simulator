@@ -86,10 +86,10 @@ public class UpdateMultiplier : MonoBehaviour
         SelectMultiplier();
     }
 
-    private void Payout()
+    private void Payout(float cost)
     {
         // Multiply bet with block multiplier
-        float amount = (float)Math.Round((m_gameManager.GetBet() * m_multiplierAmount), 2);
+        float amount = (float)Math.Round((cost * m_multiplierAmount), 2);
 
         // Update balance with multiplied bet amount
         m_gameManager.Deposit(amount);
@@ -242,12 +242,15 @@ public class UpdateMultiplier : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
+            // Retrieve ball cost
+            float cost = (float)Math.Round(collision.gameObject.GetComponent<Ball>().GetCost(), 2);
+
+            // Update balance with multiplied ball cost amount
+            Payout(cost);
+
             // Deactivate other object on impact
             collision.gameObject.SetActive(false);
             m_gameManager.isBetting = false;
-
-            // Update balance with multiplied bet amount
-            Payout();
         }
     }
 }

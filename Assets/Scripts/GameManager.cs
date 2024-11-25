@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Restart();
+            GameOver();
         }
     }
 
@@ -179,6 +179,7 @@ public class GameManager : MonoBehaviour
         {
             // Activate object
             pooledObj.SetActive(true);
+            pooledObj.GetComponent<Ball>().SetCost(this.bet);
 
             // Randomly selected a spawn point
             int spawnPoint = (int)UnityEngine.Random.Range(0, 3);
