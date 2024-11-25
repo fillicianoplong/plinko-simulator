@@ -5,6 +5,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     private float cost;
+    private float value;
 
     // Start is called before the first frame update
     void Start()
@@ -18,15 +19,23 @@ public class Ball : MonoBehaviour
         
     }
 
-    // Set ball cost
     public void SetCost(float cost)
     {
         this.cost = cost;
     }
 
-    // Get ball cost
+    public void SetValue(float value)
+    {
+        this.value = value;
+    }
+
     public float GetCost()
     {
         return cost;
+    }
+
+    public float GetValue()
+    {
+        return value;
     }
 }
