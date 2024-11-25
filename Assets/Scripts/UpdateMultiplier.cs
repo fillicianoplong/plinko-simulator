@@ -3,83 +3,81 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class UpdateMultiplier : MonoBehaviour
 {
-    private decimal m_multiplierAmount;
+    private float m_multiplierAmount;
     private TextMeshProUGUI m_multiplierText;
     private GameManager m_gameManager;
-    private UIManager m_uiManager;
 
-
-    decimal[,] m_multipliers8 = new decimal[3, 5]
+    float[,] m_multipliers8 = new float[3, 5]
     {
-    {0.5m, 1.0m, 1.1m, 2.1m, 5.6m},
-    {0.4m, 0.7m, 1.3m, 3.0m, 13.0m},
-    {0.2m, 0.3m, 1.5m, 4.0m, 29.0m}
+    {0.5f, 1.0f, 1.1f, 2.1f, 5.6f},
+    {0.4f, 0.7f, 1.3f, 3.0f, 13.0f},
+    {0.2f, 0.3f, 1.5f, 4.0f, 29.0f}
     };
 
-    decimal[,] m_multipliers9 = new decimal[3, 5]
+    float[,] m_multipliers9 = new float[3, 5]
     {
-    {0.7m, 1.0m, 1.6m, 2.0m, 5.6m},
-    {0.5m, 0.9m, 1.7m, 4.0m, 18.0m},
-    {0.2m, 0.6m, 2.0m, 7.0m, 43.0m}
+    {0.7f, 1.0f, 1.6f, 2.0f, 5.6f},
+    {0.5f, 0.9f, 1.7f, 4.0f, 18.0f},
+    {0.2f, 0.6f, 2.0f, 7.0f, 43.0f}
     };
 
-    decimal[,] m_multipliers10 = new decimal[3, 6]
+    float[,] m_multipliers10 = new float[3, 6]
     {
-    {0.5m, 1.0m, 1.1m, 1.4m, 3.0m, 8.9m},
-    {0.4m, 0.6m, 1.4m, 2.0m, 5.0m, 22.0m},
-    {0.2m, 0.3m, 0.9m, 3.0m, 10.0m, 76.0m}
+    {0.5f, 1.0f, 1.1f, 1.4f, 3.0f, 8.9f},
+    {0.4f, 0.6f, 1.4f, 2.0f, 5.0f, 22.0f},
+    {0.2f, 0.3f, 0.9f, 3.0f, 10.0f, 76.0f}
     };
 
-    decimal[,] m_multipliers11 = new decimal[3, 6]
+    float[,] m_multipliers11 = new float[3, 6]
     {
-    {0.7m, 1.0m, 1.3m, 1.9m, 3.0m, 8.4m},
-    {0.5m, 0.7m, 1.8m, 3.0m, 6.0m, 24.0m},
-    {0.2m, 0.4m, 1.4m, 5.2m, 14.0m, 120.0m}
+    {0.7f, 1.0f, 1.3f, 1.9f, 3.0f, 8.4f},
+    {0.5f, 0.7f, 1.8f, 3.0f, 6.0f, 24.0f},
+    {0.2f, 0.4f, 1.4f, 5.2f, 14.0f, 120.0f}
     };
 
-    decimal[,] m_multipliers12 = new decimal[3, 7]
+    float[,] m_multipliers12 = new float[3, 7]
     {
-    {0.5m, 1.0m, 1.1m, 1.4m, 1.6m, 3.0m, 10.0m},
-    {0.3m, 0.6m, 1.1m, 2.0m, 4.0m, 11.0m, 33.0m},
-    {0.2m, 0.2m, 0.7m, 2.0m, 8.1m, 24.0m, 170.0m}
+    {0.5f, 1.0f, 1.1f, 1.4f, 1.6f, 3.0f, 10.0f},
+    {0.3f, 0.6f, 1.1f, 2.0f, 4.0f, 11.0f, 33.0f},
+    {0.2f, 0.2f, 0.7f, 2.0f, 8.1f, 24.0f, 170.0f}
     };
 
-    decimal[,] m_multipliers13 = new decimal[3, 7]
+    float[,] m_multipliers13 = new float[3, 7]
     {
-    {0.7m, 0.9m, 1.2m, 1.9m, 3.0m, 4.0m, 8.1m},
-    {0.4m, 0.7m, 1.3m, 3.0m, 6.0m, 13.0m, 43.0m},
-    {0.2m, 0.2m, 1.0m, 4.0m, 11.0m, 37.0m, 260.0m}
+    {0.7f, 0.9f, 1.2f, 1.9f, 3.0f, 4.0f, 8.1f},
+    {0.4f, 0.7f, 1.3f, 3.0f, 6.0f, 13.0f, 43.0f},
+    {0.2f, 0.2f, 1.0f, 4.0f, 11.0f, 37.0f, 260.0f}
     };
 
-    decimal[,] m_multipliers14 = new decimal[3, 8]
+    float[,] m_multipliers14 = new float[3, 8]
     {
-    {0.5m, 1.0m, 1.1m, 1.3m, 1.4m, 1.9m, 4.0m, 7.1m},
-    {0.2m, 0.5m, 1.0m, 1.9m, 4.0m, 7.0m, 15.0m, 58.0m},
-    {0.2m, 0.2m, 0.3m, 1.9m, 5.0m, 18.0m, 56.0m, 420.0m}
+    {0.5f, 1.0f, 1.1f, 1.3f, 1.4f, 1.9f, 4.0f, 7.1f},
+    {0.2f, 0.5f, 1.0f, 1.9f, 4.0f, 7.0f, 15.0f, 58.0f},
+    {0.2f, 0.2f, 0.3f, 1.9f, 5.0f, 18.0f, 56.0f, 420.0f}
     };
 
-    decimal[,] m_multipliers15 = new decimal[3, 8]
+    float[,] m_multipliers15 = new float[3, 8]
     {
-    {0.7m, 1.0m, 1.1m, 1.5m, 2.0m, 3.0m, 8.0m, 15.0m},
-    {0.3m, 0.5m, 1.3m, 3.0m, 5.0m, 11.0m, 18.0m, 88.0m},
-    {0.2m, 0.2m, 0.5m, 3.0m, 8.0m, 27.0m, 83.0m, 620.0m}
+    {0.7f, 1.0f, 1.1f, 1.5f, 2.0f, 3.0f, 8.0f, 15.0f},
+    {0.3f, 0.5f, 1.3f, 3.0f, 5.0f, 11.0f, 18.0f, 88.0f},
+    {0.2f, 0.2f, 0.5f, 3.0f, 8.0f, 27.0f, 83.0f, 620.0f}
     };
 
-    decimal[,] m_multipliers16 = new decimal[3, 9]
+    float[,] m_multipliers16 = new float[3, 9]
     {
-    {0.5m, 1.0m, 1.1m, 1.2m, 1.4m, 1.4m, 2.0m, 9.0m, 16.0m},
-    {0.3m, 0.5m, 1.0m, 1.5m, 3.0m, 5.0m, 10.0m, 41.0m, 110.0m},
-    {0.2m, 0.2m, 0.2m, 2.0m, 4.0m, 9.0m, 26.0m, 130.0m, 1000.0m}
+    {0.5f, 1.0f, 1.1f, 1.2f, 1.4f, 1.4f, 2.0f, 9.0f, 16.0f},
+    {0.3f, 0.5f, 1.0f, 1.5f, 3.0f, 5.0f, 10.0f, 41.0f, 110.0f},
+    {0.2f, 0.2f, 0.2f, 2.0f, 4.0f, 9.0f, 26.0f, 130.0f, 1000.0f}
     };
 
     void Start()
     {
         // Get components
         m_gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        m_uiManager = GameObject.Find("Game Manager").GetComponent<UIManager>();
         m_multiplierText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
@@ -91,15 +89,15 @@ public class UpdateMultiplier : MonoBehaviour
     private void Payout()
     {
         // Multiply bet with block multiplier
-        decimal amount = m_gameManager.bet * m_multiplierAmount;
+        float amount = (float)Math.Round((m_gameManager.GetBet() * m_multiplierAmount), 2);
 
         // Update balance with multiplied bet amount
-        m_gameManager.GetBet(amount);
+        m_gameManager.Deposit(amount);
     }
 
     private void SelectMultiplier()
     {
-        string selectedStage = m_uiManager.selectedStageText;
+        string selectedStage = m_gameManager.row;
 
         switch (selectedStage)
         {
@@ -135,9 +133,9 @@ public class UpdateMultiplier : MonoBehaviour
         m_multiplierText.text = m_multiplierAmount.ToString() + "x";
     }
 
-    private void SetMultiplier(decimal[,] multiplier)
+    private void SetMultiplier(float[,] multiplier)
     {
-        string selectedRisk = m_uiManager.selectedRiskText;
+        string selectedRisk = m_gameManager.risk;
 
         switch (selectedRisk)
         {

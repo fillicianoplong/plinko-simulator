@@ -19,22 +19,22 @@ public class Ball : MonoBehaviour
         
     }
 
-    void SetCost(float cost)
+    public void SetCost(float cost)
     {
         this.cost = cost;
     }
 
-    void SetValue(float value)
+    public void SetValue(float value)
     {
         this.value = value;
     }
 
-    float GetCost()
+    public float GetCost()
     {
         return cost;
     }
 
-    float GetValue()
+    public float GetValue()
     {
         return value;
     }

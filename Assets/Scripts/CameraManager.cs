@@ -14,6 +14,7 @@ public class CameraManager : MonoBehaviour
     private float m_aspect;
     private float m_worldHeight;
     private float m_worldWidth;
+    private float m_adjustment;
 
     // Start is called before the first frame update
     void Start()
@@ -21,9 +22,10 @@ public class CameraManager : MonoBehaviour
         m_orthographicCamera = GetComponent<Camera>();
 
         m_xPos = 0;
-        m_yPos = 0.455f;
+        m_yPos = 0.44f;
         m_width = 1.0f;
-        m_height = 0.5f;
+        m_height = 1.0f;
+        m_adjustment = 3.0f;
 
         if(m_orthographicCamera != null )
         {
@@ -111,12 +113,12 @@ public class CameraManager : MonoBehaviour
     {
         if (m_aspect <= maxAspect)
         {
-            m_orthographicCamera.orthographicSize = getWidth(m_objectToCenter.GetComponent<Transform>()) / (currentAspect * size);
+            m_orthographicCamera.orthographicSize = getWidth(m_objectToCenter.GetComponent<Transform>()) / (currentAspect * size) + m_adjustment;
             m_orthographicCamera.rect = new Rect(m_xPos, m_yPos, m_width, m_height);
         }
         else
         {
-            m_orthographicCamera.orthographicSize = getWidth(m_objectToCenter.GetComponent<Transform>()) / (maxAspect * size);
+            m_orthographicCamera.orthographicSize = getWidth(m_objectToCenter.GetComponent<Transform>()) / (maxAspect * size) + m_adjustment;
             m_orthographicCamera.rect = new Rect(m_xPos, m_yPos, m_width, m_height);
         }
     }

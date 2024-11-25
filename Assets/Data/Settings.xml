@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<settings>
+  <default>
+    <balance>10000.00</balance>
+    <bet>1.00</bet>
+    <min_bet>0.01</min_bet>
+    <max_bet>1000.00</max_bet>
+    <risk>Low</risk>
+    <row>8</row>
+    <volume>50.00</volume>
+    <auto>4</auto>
+    <turbo>5</turbo>
+    <gravity>1</gravity>
+    <bounce>0.50</bounce>
+    <friction>0.20</friction>
+  </default>
+</settings>
