@@ -23,8 +23,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button highRiskButton;
     [SerializeField] private Button turboButton;
     [SerializeField] private Button autoButton;
-    [SerializeField] private Button settingsButton;
-    [SerializeField] private Button closeButton;
     [SerializeField] private Button defaultButton;
     [SerializeField] private Button resetButton;
 
@@ -46,13 +44,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text bounceText;
     [SerializeField] private TMP_Text frictionText;
 
-    // Panels
-    [SerializeField] private GameObject settingsPanel;
+    // Objects
+    [SerializeField] private GameObject historyWidget;
+    [SerializeField] private GameObject multiplierIcon;
 
     // Colors
-    private Color lightGrey;
-    private Color mediumGrey;
     private Color darkGrey;
+    private Color lightGrey;
+    private Color lighterGrey;
 
     // Start is called before the first frame update
     void Start()
@@ -64,15 +63,13 @@ public class UIManager : MonoBehaviour
         playButton.onClick.AddListener(Play);
         autoButton.onClick.AddListener(ToggleAutoplay);
         turboButton.onClick.AddListener(ToggleTurbo);
-        settingsButton.onClick.AddListener(OpenSettings);
-        closeButton.onClick.AddListener(CloseSettings);
         defaultButton.onClick.AddListener(ResetSettings);
         resetButton.onClick.AddListener(m_gameManager.Restart);
 
         // Set on click listeners with variables
-        lowRiskButton.onClick.AddListener(delegate { SetRisk(lowRiskButton); });
-        mediumRiskButton.onClick.AddListener(delegate { SetRisk(mediumRiskButton); });
-        highRiskButton.onClick.AddListener(delegate { SetRisk(highRiskButton); });
+        lowRiskButton.onClick.AddListener(delegate { SetRisk(0); });
+        mediumRiskButton.onClick.AddListener(delegate { SetRisk(1); });
+        highRiskButton.onClick.AddListener(delegate { SetRisk(2); });
         halfButton.onClick.AddListener(delegate { HalfBet(); });
         doubleButton.onClick.AddListener(delegate { DoubleBet(); });
 
@@ -90,8 +87,8 @@ public class UIManager : MonoBehaviour
         frictionSlider.onValueChanged.AddListener(delegate { UpdateFriction(); });
 
         // Initialize row slider
-        m_gameManager.row = rowSlider.value.ToString();
-        rowText.text = m_gameManager.row;
+        m_gameManager.SetRow((int)rowSlider.value);
+        rowText.text = m_gameManager.GetRow().ToString();
 
         // Initialize volume slider
         volumeSlider.value = (float)Math.Round(m_gameManager.GetVolume(), 2);
@@ -118,12 +115,12 @@ public class UIManager : MonoBehaviour
         frictionText.text = Math.Round(frictionSlider.value, 2).ToString("0.00");
 
         // Initialize colors
-        lightGrey = new Color(0.231f, 0.231f, 0.231f);
-        mediumGrey = new Color(0.2f, 0.2f, 0.2f);
         darkGrey = new Color(0.157f, 0.157f, 0.157f);
+        lightGrey = new Color(0.231f, 0.231f, 0.231f);
+        lighterGrey = new Color(0.373f, 0.373f, 0.373f);
 
         // Initialize buttons
-        SetRisk(lowRiskButton);
+        SetRisk(m_gameManager.GetRisk());
 
         // Format text
         Format();
@@ -137,6 +134,12 @@ public class UIManager : MonoBehaviour
             // Update balance text every frame
             balanceTextField.text = m_gameManager.GetBalance().ToString("C", CultureInfo.CurrentCulture);
 
+            // Clean widget
+            if (historyWidget.transform.childCount > 6)
+            {
+                Destroy(historyWidget.transform.GetChild(0).gameObject);
+            }
+
             // Check autoplay requirements every frame
             LimitAutoplay();
 
@@ -145,7 +148,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateBet()
+    public void UpdateWidget(BetRecord record)
+    {
+        GameObject childObj = (GameObject)Instantiate(multiplierIcon, historyWidget.transform);
+        childObj.name = record.id.ToString();
+        childObj.GetComponentInChildren<TMP_Text>().text = record.multiplier.ToString();
+        childObj.GetComponent<Image>().color = record.color;
+    }
+
+    private void UpdateBet()
     {
         // Format bet amount
         float bet = (float)Math.Round(float.Parse(betInputField.text), 2);
@@ -164,18 +175,18 @@ public class UIManager : MonoBehaviour
         m_gameManager.SetBet(bet);
     }
 
-    public void UpdateRow()
+    private void UpdateRow()
     {
         // Set row value from slider value
-        m_gameManager.row = rowSlider.value.ToString();
+        m_gameManager.SetRow((int)rowSlider.value);
 
         // Update text to new row value
-        rowText.text = m_gameManager.row;
+        rowText.text = m_gameManager.GetRow().ToString();
 
         // Enable selected board size and disable others
         for (int i = 0; i < m_gameManager.stages.Length; i++)
         {
-            if (m_gameManager.stages[i].name == m_gameManager.row)
+            if (m_gameManager.stages[i].name == m_gameManager.GetRow().ToString())
             {
                 m_gameManager.stages[i].SetActive(true);
             }
@@ -186,7 +197,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateVolume()
+    private void UpdateVolume()
     {
         // Set volume value from slider value
         m_gameManager.SetVolume(volumeSlider.value);
@@ -195,7 +206,7 @@ public class UIManager : MonoBehaviour
         volumeText.text = Math.Round(m_gameManager.GetVolume(), 2).ToString("0.00");
     }
 
-    public void UpdateAuto()
+    private void UpdateAuto()
     {
         // Set auto value from slider value
         m_gameManager.SetAuto(autoSlider.value);
@@ -204,7 +215,7 @@ public class UIManager : MonoBehaviour
         autoText.text = Math.Round(m_gameManager.GetAuto(), 2).ToString("0.00");
     }
 
-    public void UpdateTurbo()
+    private void UpdateTurbo()
     {
         // Set turbo value from slider value
         m_gameManager.SetTurbo(turboSlider.value);
@@ -213,7 +224,7 @@ public class UIManager : MonoBehaviour
         turboText.text = Math.Round(m_gameManager.GetTurbo(), 2).ToString("0.00");
     }
 
-    public void UpdateGravityScale()
+    private void UpdateGravityScale()
     {
         // Set gravity value from slider value
         m_gameManager.SetGravityScale(gravitySlider.value);
@@ -222,7 +233,7 @@ public class UIManager : MonoBehaviour
         gravityText.text = Math.Round(m_gameManager.GetGravityScale(), 2).ToString("0.00");
     }
 
-    public void UpdateBounce()
+    private void UpdateBounce()
     {
         // Set bounce value from slider value
         m_gameManager.SetBounce(bounceSlider.value);
@@ -231,7 +242,7 @@ public class UIManager : MonoBehaviour
         bounceText.text = Math.Round(m_gameManager.GetBounce(), 2).ToString("0.00");
     }
 
-    public void UpdateFriction()
+    private void UpdateFriction()
     {
         // Set friction value from slider value
         m_gameManager.SetFriction(frictionSlider.value);
@@ -240,26 +251,26 @@ public class UIManager : MonoBehaviour
         frictionText.text = Math.Round(m_gameManager.GetFriction(), 2).ToString("0.00");
     }
 
-    public void SetRisk(Button selectedButton)
+    private void SetRisk(int risk)
     {
-        // Set risk value from selected risk button
-        m_gameManager.risk = selectedButton.name;
-
         // Update button colors based on selected button
-        if(selectedButton.name == "Low Button")
+        if(risk == 0)
         {
+            m_gameManager.GetComponent<GameManager>().SetRisk(risk);
             lowRiskButton.GetComponent<Image>().color = lightGrey;
             mediumRiskButton.GetComponent<Image>().color = darkGrey;
             highRiskButton.GetComponent<Image>().color = darkGrey;
         }
-        else if(selectedButton.name == "Medium Button")
+        else if(risk == 1)
         {
+            m_gameManager.GetComponent<GameManager>().SetRisk(risk);
             lowRiskButton.GetComponent<Image>().color = darkGrey;
             mediumRiskButton.GetComponent<Image>().color = lightGrey;
             highRiskButton.GetComponent<Image>().color = darkGrey;
         }
-        else if (selectedButton.name == "High Button")
+        else if (risk == 2)
         {
+            m_gameManager.GetComponent<GameManager>().SetRisk(risk);
             lowRiskButton.GetComponent<Image>().color = darkGrey;
             mediumRiskButton.GetComponent<Image>().color = darkGrey;
             highRiskButton.GetComponent<Image>().color = lightGrey;
@@ -268,9 +279,6 @@ public class UIManager : MonoBehaviour
 
     private void Play()
     {
-        // Subtract bet amount from balance
-        m_gameManager.Withdraw();
-
         // Drop ball
         m_gameManager.ActivateBall();
     }
@@ -285,7 +293,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ToggleAutoplay()
+    private void ToggleAutoplay()
     {
         // Toggle auto value
         m_gameManager.isAuto = !m_gameManager.isAuto;
@@ -293,28 +301,31 @@ public class UIManager : MonoBehaviour
         // Start/stop autoplay and update button color
         if (m_gameManager.isAuto == true)
         {
-            autoButton.GetComponent<Image>().color = mediumGrey;
+            autoButton.GetComponent<Image>().color = lighterGrey;
+            autoButton.GetComponentInChildren<TMP_Text>().color = Color.white;
             StartCoroutine(AutoPlay());
         }
         else
         {
             autoButton.GetComponent<Image>().color = darkGrey;
+            autoButton.GetComponentInChildren<TMP_Text>().color = lighterGrey;
             StopCoroutine(AutoPlay());
         }
     }
 
-    public void LimitAutoplay()
+    private void LimitAutoplay()
     {
         // Disable autoplay if conditions are not met
         if (m_gameManager.GetBalance() < m_gameManager.GetBet())
         {
             m_gameManager.isAuto = false;
             autoButton.GetComponent<Image>().color = darkGrey;
+            autoButton.GetComponentInChildren<TMP_Text>().color = lighterGrey;
             StopCoroutine(AutoPlay());
         }
     }
 
-    public void ToggleTurbo()
+    private void ToggleTurbo()
     {
         // Toggle turbo
         m_gameManager.isTurbo = !m_gameManager.isTurbo;
@@ -323,28 +334,18 @@ public class UIManager : MonoBehaviour
         if (m_gameManager.isTurbo == true)
         {
             m_gameManager.EnableTurbo();
-            turboButton.GetComponent<Image>().color = mediumGrey;
+            turboButton.GetComponent<Image>().color = lighterGrey;
+            turboButton.GetComponentInChildren<TMP_Text>().color = Color.white;
         }
         else
         {
             m_gameManager.DisableTurbo();
             turboButton.GetComponent<Image>().color = darkGrey;
+            turboButton.GetComponentInChildren<TMP_Text>().color = lighterGrey;
         }
     }
 
-    public void OpenSettings()
-    {
-        // Activate settings panel
-        settingsPanel.SetActive(true);
-    }
-
-    public void CloseSettings()
-    {
-        // Deactivate settings panel
-        settingsPanel.SetActive(false);
-    }
-
-    public void ResetSettings()
+    private void ResetSettings()
     {
         // Reset volume
         m_gameManager.SetVolume(50.0f);
@@ -377,7 +378,7 @@ public class UIManager : MonoBehaviour
         frictionText.text = Math.Round(frictionSlider.value, 2).ToString("0.00");
     }
 
-    public void HalfBet()
+    private void HalfBet()
     {
         // Half bet if possible or set bet to minimum bet limit
         if (m_gameManager.GetBet() * 0.5f > m_gameManager.GetMinBet())
@@ -393,7 +394,7 @@ public class UIManager : MonoBehaviour
         Format();
     }
 
-    public void DoubleBet()
+    private void DoubleBet()
     {
         // Double bet if possible or set bet to maximum bet limit
         if (m_gameManager.GetBet() * 2.0f < m_gameManager.GetMaxBet())

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ball
   - Out of Bounds
+  - MultiplierManager
   layers:
   - Default
   - TransparentFX

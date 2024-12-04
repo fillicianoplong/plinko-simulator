@@ -248,9 +248,7 @@ GameObject:
   - component: {fileID: 2769220950042968938}
   - component: {fileID: 3841797495389920427}
   - component: {fileID: -4137502755579411510}
-  - component: {fileID: 2757867524931276859}
-  - component: {fileID: 4539667651532176536}
-  - component: {fileID: 4289759613655963293}
+  - component: {fileID: 5906955465702243509}
   m_Layer: 0
   m_Name: Multiplier
   m_TagString: Untagged
@@ -467,7 +465,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2757867524931276859
+--- !u!114 &5906955465702243509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -479,30 +477,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f2344f5e0eb2e4b96ed8c9121d5586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4539667651532176536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7736154685469916889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4855da32c753f40ae9847216564e73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_multiplierText: {fileID: 0}
+  m_multiplier: 0
+  m_payout: 0
+  minHue: 0
+  maxHue: 45
+  m_color: {r: 1, g: 1, b: 1, a: 0}
+  m_clip: {fileID: 0}
   m_distance: -0.5
   m_time: 0.05
---- !u!114 &4289759613655963293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7736154685469916889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5e504d05632d0341ab2a3d91e3ce210, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_clip: {fileID: 8300000, guid: 49d7268b859e4004a957147b68f4f7fa, type: 3}

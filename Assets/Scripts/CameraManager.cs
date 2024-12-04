@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -22,9 +19,9 @@ public class CameraManager : MonoBehaviour
         m_orthographicCamera = GetComponent<Camera>();
 
         m_xPos = 0;
-        m_yPos = 0.44f;
+        m_yPos = 0.385f;
         m_width = 1.0f;
-        m_height = 1.0f;
+        m_height = 0.9f;
         m_adjustment = 3.0f;
 
         if(m_orthographicCamera != null )

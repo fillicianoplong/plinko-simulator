@@ -1,32 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    private float cost;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private float m_cost;
 
     // Set ball cost
     public void SetCost(float cost)
     {
-        this.cost = cost;
+        m_cost = cost;
     }
 
     // Get ball cost
     public float GetCost()
     {
-        return cost;
+        return m_cost;
     }
 }
