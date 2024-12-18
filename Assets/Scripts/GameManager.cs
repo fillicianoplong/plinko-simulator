@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
-using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,6 +41,10 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        // Reduce jitter on mobile
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+
         // History variable
         m_betHistory = gameObject.GetComponent<BetHistory>();
 
@@ -62,9 +65,9 @@ public class GameManager : MonoBehaviour
 
         // Initialize physics variables
         m_gravity = 9.81f;
-        m_gravityScale = 1.0f;
+        m_gravityScale = 2.0f;
         m_bounce = 0.5f;
-        m_friction = 0.1f;
+        m_friction = 0.5f;
 
         // Initialize volume
         AudioListener.volume = m_volume;
@@ -245,7 +248,7 @@ public class GameManager : MonoBehaviour
             Withdraw(pooledObj.GetComponent<Ball>().GetCost());
 
             // Randomly select a spawn point
-            int spawnPoint = (int)UnityEngine.Random.Range(0, 3);
+            int spawnPoint = (int)UnityEngine.Random.Range(0, 5);
 
             // Set object position based on randomly selected spawn point
             switch (spawnPoint)
@@ -254,10 +257,16 @@ public class GameManager : MonoBehaviour
                     pooledObj.transform.position = new Vector3(UnityEngine.Random.Range(-0.1f, 0.1f), m_spawnHeight, 0);
                     break;
                 case 1:
-                    pooledObj.transform.position = new Vector3(UnityEngine.Random.Range(-3.0f, -2.9f), m_spawnHeight, 0);
+                    pooledObj.transform.position = new Vector3(UnityEngine.Random.Range(-1.6f, -1.4f), m_spawnHeight, 0);
                     break;
                 case 2:
-                    pooledObj.transform.position = new Vector3(UnityEngine.Random.Range(2.9f, 3.0f), m_spawnHeight, 0);
+                    pooledObj.transform.position = new Vector3(UnityEngine.Random.Range(1.4f, 1.6f), m_spawnHeight, 0);
+                    break;
+                case 3:
+                    pooledObj.transform.position = new Vector3(UnityEngine.Random.Range(-3.01f, -2.9f), m_spawnHeight, 0);
+                    break;
+                case 4:
+                    pooledObj.transform.position = new Vector3(UnityEngine.Random.Range(2.9f, 3.01f), m_spawnHeight, 0);
                     break;
             }
         }
